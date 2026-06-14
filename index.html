@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Ultra Webhook Sender • Discord OAuth2 Secure</title>
+    <!-- Google Font & einfache Icons (Font Awesome CDN für bessere Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0a0c12 0%, #0f1117 100%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            color: #eef2ff;
+        }
+
+        /* Container */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(75, 85, 130, 0.4);
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #ffffff, #8b9dff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .logo p {
+            font-size: 0.8rem;
+            color: #8b93b0;
+        }
+        .user-area {
+            background: #1e212b;
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            backdrop-filter: blur(4px);
+        }
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #5865f2;
+        }
+        .btn-logout, .btn-login {
+            background: #2c2f3a;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .btn-logout:hover, .btn-login:hover {
+            background: #3a3f4e;
+        }
+        .btn-primary {
+            background: #5865f2;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-primary:hover {
+            background: #4752c4;
+            transform: scale(0.98);
+        }
+        .btn-secondary {
+            background: #2e3440;
+            border: 1px solid #3b4252;
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: #d8dee9;
+            cursor: pointer;
+        }
+        /* Cards */
+        .card {
+            background: rgba(30, 34, 48, 0.75);
+            backdrop-filter: blur(6px);
+            border-radius: 28px;
+            border: 1px solid rgba(88, 101, 242, 0.25);
+            padding: 1.5rem;
+            margin-bottom: 1.8rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.8rem;
+        }
+        @media (max-width: 780px) {
+            .grid-2col { grid-template-columns: 1fr; }
+            body { padding: 1rem; }
+        }
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #cbd5ff;
+            font-size: 0.85rem;
+        }
+        input, select, textarea {
+            width: 100%;
+            background: #0f1119;
+            border: 1px solid #2a2e3f;
+            border-radius: 16px;
+            padding: 12px 16px;
+            color: #f0f3ff;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #5865f2;
+            box-shadow: 0 0 0 2px rgba(88,101,242,0.3);
+        }
+        textarea {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            resize: vertical;
+        }
+        .headers-list {
+            background: #0b0e14;
+            border-radius: 20px;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .header-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+        .header-row input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        .remove-header {
+            background: #b91c1c80;
+            border: none;
+            color: white;
+            border-radius: 30px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+        }
+        .add-header-btn {
+            background: #2c2f3a;
+            border: 1px dashed #5865f2;
+            padding: 8px;
+            border-radius: 30px;
+            width: 100%;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+        .response-area {
+            background: #05070c;
+            border-radius: 20px;
+            padding: 1rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 300px;
+            overflow: auto;
+        }
+        .badge {
+            background: #5865f2;
+            border-radius: 30px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        .flex-btns {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .history-item {
+            background: #0f111a;
+            border-radius: 14px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .alert {
+            background: #f97316cc;
+            border-left: 6px solid #ff8c42;
+            padding: 12px;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+        }
+        .login-wall {
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+        .hidden {
+            display: none;
+        }
+        i {
+            margin-right: 8px;
+        }
+        hr {
+            border-color: #2d3150;
+            margin: 12px 0;
+        }
+        .status-text {
+            font-size: 0.8rem;
+            color: #9ca3cf;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container" id="appRoot">
+    <div class="header">
+        <div class="logo">
+            <h1><i class="fas fa-paper-plane"></i> Webhook Galaxy Sender</h1>
+            <p>Extreme Features · Discord OAuth2 gesichert · Member-Only</p>
+        </div>
+        <div id="authWidget"></div>
+    </div>
+
+    <!-- UNAUTHENTICATED VIEW (Login screen) -->
+    <div id="unauthedView" class="login-wall card">
+        <i class="fab fa-discord" style="font-size: 3rem; color:#5865f2;"></i>
+        <h2 style="margin-top: 1rem;">Discord Authentifizierung erforderlich</h2>
+        <p style="margin: 1rem 0;">Du musst dich mit Discord anmelden und Mitglied des <strong>autorisierten Servers</strong> sein, um den vollen Webhook-Sender nutzen zu können.<br>Logins werden zur Sicherheit protokolliert.</p>
+        <button id="discordLoginBtn" class="btn-primary" style="font-size: 1.1rem;"><i class="fab fa-discord"></i> Mit Discord anmelden</button>
+        <div class="status-text" style="margin-top: 1rem;">⚙️ PKCE OAuth2 · Server Mitgliedschaftsprüfung</div>
+    </div>
+
+    <!-- AUTHENTICATED VIEW (Webhook Sender + Features) -->
+    <div id="authedView" class="hidden">
+        <div id="guildCheckMsg" class="alert hidden"></div>
+        <div class="grid-2col">
+            <!-- Linke Spalte: Webhook Konfiguration -->
+            <div class="card">
+                <h3><i class="fas fa-cog"></i> Webhook Konfiguration</h3>
+                <div class="input-group">
+                    <label><i class="fas fa-link"></i> Ziel-Webhook URL *</label>
+                    <input type="url" id="webhookUrl" placeholder="https://discord.com/api/webhooks/... oder beliebiger Endpunkt" value="https://discord.com/api/webhooks/example">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-globe"></i> HTTP Methode</label>
+                    <select id="httpMethod">
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="PATCH">PATCH</option>
+                        <option value="DELETE">DELETE</option>
+                        <option value="GET">GET</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-code"></i> Content-Type</label>
+                    <select id="contentTypeSelect">
+                        <option value="application/json">application/json</option>
+                        <option value="application/x-www-form-urlencoded">x-www-form-urlencoded</option>
+                        <option value="text/plain">text/plain</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-heading"></i> Request Body (Payload)</label>
+                    <textarea id="requestBody" rows="6" placeholder='{"content": "Hallo Welt!", "embeds": []}'></textarea>
+                    <div class="flex-btns">
+                        <button id="prettyJsonBtn" class="btn-secondary" type="button"><i class="fas fa-magic"></i> JSON formatieren</button>
+                        <button id="clearBodyBtn" class="btn-secondary" type="button"><i class="fas fa-trash"></i> Leeren</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-bolt"></i> Zusätzliche Header (Key-Value)</label>
+                    <div id="headersContainer" class="headers-list"></div>
+                    <button id="addHeaderBtn" class="add-header-btn"><i class="fas fa-plus"></i> Header hinzufügen</button>
+                </div>
+                <div class="flex-btns">
+                    <button id="sendWebhookBtn" class="btn-primary"><i class="fas fa-paper-plane"></i> WEBHOOK SENDEN</button>
+                    <button id="savePresetBtn" class="btn-secondary"><i class="fas fa-save"></i> Als Preset speichern</button>
+                    <button id="loadPresetBtn" class="btn-secondary"><i class="fas fa-folder-open"></i> Letztes Preset laden</button>
+                </div>
+            </div>
+
+            <!-- Rechte Spalte: Response & History & Infos -->
+            <div class="card">
+                <h3><i class="fas fa-chart-line"></i> Antwort / Logs</h3>
+                <div id="responseContainer" class="response-area">
+                    💡 Hier erscheint die Server-Antwort nach dem Senden.
+                </div>
+                <h3 style="margin-top: 1rem;"><i class="fas fa-history"></i> Request Verlauf (lokal)</h3>
+                <div id="historyList" class="history-list" style="max-height: 200px; overflow-y: auto;">
+                    — Noch keine Anfragen —
+                </div>
+                <button id="clearHistoryBtn" class="btn-secondary" style="margin-top: 8px;"><i class="fas fa-eraser"></i> Verlauf löschen</button>
+                <hr>
+                <div class="status-text">
+                    <i class="fas fa-shield-alt"></i> Auth: Discord OAuth2 (PKCE) · Server-ID geprüft · Logins werden an sicheren Webhook gemeldet
+                </div>
+            </div>
+        </div>
+        <div class="card" style="margin-top: 0.5rem;">
+            <h3><i class="fas fa-question-circle"></i> Features / Hinweise</h3>
+            <ul style="margin-left: 1.5rem; color: #b9c3e6;">
+                <li>✅ Discord Login mit PKCE – kein Backend nötig</li>
+                <li>✅ Nur Mitglieder eines bestimmten Servers können senden</li>
+                <li>✅ Login-Logging (Username, ID, Zeit) an privaten Webhook (hardcoded)</li>
+                <li>✅ Dynamische Header, Methoden, Body-Typen & Live Response</li>
+                <li>✅ Presets / Verlauf speichern (lokal)</li>
+                <li>✅ CORS-Einschränkungen können auftreten – für Discord Webhooks funktioniert es meist</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ======================== KONFIGURATION (BITTE ANPASSEN) ========================
+    // Discord OAuth2 Client ID - HIER DEINE EIGENE EINTRAGEN (Discord Developer Portal)
+    const DISCORD_CLIENT_ID = "1515748206628176004";    // <-- ersetzen mit echter Client ID
+    // Ziel-Guild (Server), dessen Mitgliedschaft erforderlich ist
+    const REQUIRED_GUILD_ID = "1397535974476480613";     // <-- z.B. "123456789012345678"
+    // PRIVATER LOG-WEBHOOK (hardcoded für Login-Tracking) – HIER EIGENE DISCORD WEBHOOK URL EINTRAGEN!
+    const PRIVATE_LOG_WEBHOOK = "https://discord.com/api/webhooks/1515747821599592458/Bv9_EUALdbJnRgAD1lhh47cw0C7RSKc-pbxrFOo7Mdst_dWLE-Kzjr4aHLUpkYVTasnO"; 
+    // Dynamische Redirect URI (aktuelle Seite)
+    const REDIRECT_URI = window.location.href.split('?')[0]; 
+    
+    // Globale Variablen
+    let accessToken = null;
+    let currentUser = null;      // { id, username, avatar }
+    let userGuilds = [];
+    let isMemberAllowed = false;
+    
+    // UI Elemente
+    const unauthedDiv = document.getElementById('unauthedView');
+    const authedDiv = document.getElementById('authedView');
+    const authWidget = document.getElementById('authWidget');
+    const guildCheckMsg = document.getElementById('guildCheckMsg');
+    
+    // ------------------------ PKCE HELPER ---------------------------------
+    async function generateCodeVerifier() {
+        const array = new Uint8Array(32);
+        crypto.getRandomValues(array);
+        return btoa(String.fromCharCode(...array)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+    }
+    async function generateCodeChallenge(verifier) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(verifier);
+        const digest = await crypto.subtle.digest('SHA-256', data);
+        return btoa(String.fromCharCode(...new Uint8Array(digest))).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+    }
+    
+    // Discord OAuth2 URL erstellen
+    async function redirectToDiscordAuth() {
+        const verifier = await generateCodeVerifier();
+        sessionStorage.setItem('pkce_verifier', verifier);
+        const challenge = await generateCodeChallenge(verifier);
+        const params = new URLSearchParams({
+            client_id: DISCORD_CLIENT_ID,
+            response_type: 'code',
+            redirect_uri: REDIRECT_URI,
+            scope: 'identify guilds',
+            code_challenge_method: 'S256',
+            code_challenge: challenge
+        });
+        window.location.href = `https://discord.com/api/oauth2/authorize?${params.toString()}`;
+    }
+    
+    // Token austauschen (PKCE)
+    async function exchangeCodeForToken(code, verifier) {
+        const body = new URLSearchParams({
+            client_id: DISCORD_CLIENT_ID,
+            grant_type: 'authorization_code',
+            code: code,
+            redirect_uri: REDIRECT_URI,
+            code_verifier: verifier
+        });
+        const resp = await fetch('https://discord.com/api/oauth2/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body.toString()
+        });
+        if (!resp.ok) throw new Error('Token exchange failed');
+        const data = await resp.json();
+        return data.access_token;
+    }
+    
+    // User Info + Guilds fetchen
+    async function fetchUserData(token) {
+        const userResp = await fetch('https://discord.com/api/users/@me', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!userResp.ok) throw new Error('User fetch failed');
+        const user = await userResp.json();
+        const guildsResp = await fetch('https://discord.com/api/users/@me/guilds', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!guildsResp.ok) throw new Error('Guilds fetch failed');
+        const guilds = await guildsResp.json();
+        return { user, guilds };
+    }
+    
+    // Prüfen ob User in required guild ist
+    function checkGuildMembership(guilds, requiredId) {
+        return guilds.some(g => g.id === requiredId);
+    }
+    
+    // LOGIN LOGGING an privaten Webhook (hardcoded)
+    async function sendLoginLog(user, success, reason = "") {
+        if (!PRIVATE_LOG_WEBHOOK || PRIVATE_LOG_WEBHOOK.includes("your/loghook")) {
+            console.warn("⚠️ Kein gültiger Log-Webhook konfiguriert (bitte PRIVATE_LOG_WEBHOOK setzen)");
+            return;
+        }
+        const embed = {
+            title: success ? "✅ Webhook Sender Login" : "❌ Login versuch (Zugriff verweigert)",
+            color: success ? 0x57F287 : 0xED4245,
+            fields: [
+                { name: "Benutzer", value: `${user.username} (${user.id})`, inline: true },
+                { name: "Zeitstempel", value: new Date().toISOString(), inline: true },
+                { name: "Zugriff erlaubt", value: success ? "Ja" : `Nein - ${reason}`, inline: false }
+            ],
+            footer: { text: "Webhook Galaxy Sender · Login Tracker" }
+        };
+        try {
+            await fetch(PRIVATE_LOG_WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ embeds: [embed] })
+            });
+        } catch(e) { console.error("Logging fehlgeschlagen", e); }
+    }
+    
+    // Login Flow: Code aus URL holen
+    async function handleOAuthRedirect() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        if (code) {
+            const verifier = sessionStorage.getItem('pkce_verifier');
+            if (!verifier) {
+                showError("Kein PKCE Verifier gefunden, starte neu.");
+                window.history.replaceState({}, document.title, window.location.pathname);
+                return;
+            }
+            try {
+                const token = await exchangeCodeForToken(code, verifier);
+                accessToken = token;
+                const { user, guilds } = await fetchUserData(token);
+                currentUser = user;
+                userGuilds = guilds;
+                const member = checkGuildMembership(guilds, REQUIRED_GUILD_ID);
+                isMemberAllowed = member;
+                // Login loggen (mit oder ohne Berechtigung)
+                await sendLoginLog(user, member, member ? "" : "User nicht im erforderlichen Server");
+                if (!member) {
+                    showGuildError(`⛔ Zugriff verweigert: Du bist nicht Mitglied des erforderlichen Servers (ID: ${REQUIRED_GUILD_ID}).`);
+                    accessToken = null;
+                    renderAuthState();
+                } else {
+                    // Erfolgreich authentifiziert & Mitglied
+                    renderAuthState();
+                    initWebhookSenderUI();
+                }
+                // Code aus URL entfernen
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } catch (err) {
+                console.error(err);
+                showError("OAuth2 Fehler: " + err.message);
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        } else {
+            // eventuell vorhandener token? nicht persistiert -> muss neu einloggen
+            renderAuthState();
+        }
+    }
+    
+    function showGuildError(msg) {
+        guildCheckMsg.innerText = msg;
+        guildCheckMsg.classList.remove('hidden');
+        authedDiv.classList.add('hidden');
+        unauthedDiv.classList.remove('hidden');
+    }
+    function showError(msg) {
+        alert(msg);
+    }
+    function renderAuthState() {
+        if (accessToken && isMemberAllowed && currentUser) {
+            unauthedDiv.classList.add('hidden');
+            authedDiv.classList.remove('hidden');
+            guildCheckMsg.classList.add('hidden');
+            // Widget anzeigen (Userinfo)
+            authWidget.innerHTML = `
+                <div class="user-area">
+                    <img class="avatar" src="https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png?size=32" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+                    <span style="font-weight:500;">${currentUser.username}</span>
+                    <button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            `;
+            document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                accessToken = null;
+                currentUser = null;
+                isMemberAllowed = false;
+                renderAuthState();
+                location.reload(); // clean reload
+            });
+        } else {
+            authedDiv.classList.add('hidden');
+            unauthedDiv.classList.remove('hidden');
+            authWidget.innerHTML = `<button id="loginHeaderBtn" class="btn-primary"><i class="fab fa-discord"></i> Anmelden</button>`;
+            const loginBtn = document.getElementById('loginHeaderBtn');
+            if(loginBtn) loginBtn.onclick = () => redirectToDiscordAuth();
+            document.getElementById('discordLoginBtn')?.addEventListener('click', () => redirectToDiscordAuth());
+        }
+    }
+    
+    // ---------- Webhook Sender Kern (umfangreich) ----------
+    let customHeaders = []; // {key, value}
+    let requestHistory = [];
+    const HISTORY_KEY = "wh_sender_history";
+    const PRESET_KEY = "wh_sender_preset";
+    
+    function renderHeadersUI() {
+        const container = document.getElementById('headersContainer');
+        container.innerHTML = '';
+        customHeaders.forEach((h, idx) => {
+            const row = document.createElement('div');
+            row.className = 'header-row';
+            row.innerHTML = `
+                <input type="text" placeholder="Header-Name (z.B. Authorization)" value="${escapeHtml(h.key)}" data-header-key="${idx}">
+                <input type="text" placeholder="Wert" value="${escapeHtml(h.value)}" data-header-val="${idx}">
+                <button class="remove-header" data-idx="${idx}"><i class="fas fa-times"></i></button>
+            `;
+            container.appendChild(row);
+        });
+        document.querySelectorAll('.remove-header').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.dataset.idx);
+                customHeaders.splice(idx, 1);
+                renderHeadersUI();
+            });
+        });
+        document.querySelectorAll('[data-header-key]').forEach(inp => {
+            inp.addEventListener('change', (e) => {
+                const idx = parseInt(inp.dataset.headerKey);
+                if (!isNaN(idx)) customHeaders[idx].key = inp.value;
+            });
+        });
+        document.querySelectorAll('[data-header-val]').forEach(inp => {
+            inp.addEventListener('change', (e) => {
+                const idx = parseInt(inp.dataset.headerVal);
+                if (!isNaN(idx)) customHeaders[idx].value = inp.value;
+            });
+        });
+    }
+    
+    function addHeader() {
+        customHeaders.push({ key: "", value: "" });
+        renderHeadersUI();
+    }
+    
+    function savePreset() {
+        const preset = {
+            url: document.getElementById('webhookUrl').value,
+            method: document.getElementById('httpMethod').value,
+            contentType: document.getElementById('contentTypeSelect').value,
+            body: document.getElementById('requestBody').value,
+            headers: customHeaders
+        };
+        localStorage.setItem(PRESET_KEY, JSON.stringify(preset));
+        alert("Preset gespeichert!");
+    }
+    function loadPreset() {
+        const raw = localStorage.getItem(PRESET_KEY);
+        if(!raw) return alert("Kein gespeichertes Preset");
+        try {
+            const p = JSON.parse(raw);
+            document.getElementById('webhookUrl').value = p.url;
+            document.getElementById('httpMethod').value = p.method;
+            document.getElementById('contentTypeSelect').value = p.contentType;
+            document.getElementById('requestBody').value = p.body;
+            customHeaders = p.headers || [];
+            renderHeadersUI();
+        } catch(e){}
+    }
+    
+    function addToHistory(method, url, status, success) {
+        const entry = { method, url, status, success, timestamp: new Date().toLocaleString() };
+        requestHistory.unshift(entry);
+        if(requestHistory.length > 20) requestHistory.pop();
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(requestHistory));
+        renderHistory();
+    }
+    
+    function renderHistory() {
+        const historyDiv = document.getElementById('historyList');
+        if(!historyDiv) return;
+        if(requestHistory.length === 0) {
+            historyDiv.innerHTML = '— Keine Anfragen —';
+            return;
+        }
+        historyDiv.innerHTML = requestHistory.map((h, idx) => `
+            <div class="history-item" data-idx="${idx}">
+                <strong>${h.method}</strong> ${h.url.substring(0, 50)}... <span style="color:${h.success ? '#57F287' : '#ED4245'}">${h.status}</span><br>
+                <small>${h.timestamp}</small>
+            </div>
+        `).join('');
+        // Klick zum Wiederherstellen
+        document.querySelectorAll('.history-item').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const idx = el.dataset.idx;
+                if(idx !== undefined) {
+                    // nicht vollständige payload rekonstruieren, nur zur info
+                    alert("History-Log: Nur Metadaten gespeichert, bitte manuell wiederholen.");
+                }
+            });
+        });
+    }
+    
+    async function sendWebhook() {
+        if(!accessToken || !isMemberAllowed) {
+            alert("Nicht authentifiziert oder keine Mitgliedschaft");
+            return;
+        }
+        const url = document.getElementById('webhookUrl').value;
+        if(!url || url.trim() === "") {
+            alert("Bitte Webhook URL eingeben");
+            return;
+        }
+        const method = document.getElementById('httpMethod').value;
+        let contentType = document.getElementById('contentTypeSelect').value;
+        let rawBody = document.getElementById('requestBody').value;
+        let bodyToSend = null;
+        if(method !== 'GET' && method !== 'DELETE') {
+            if(contentType === 'application/json') {
+                try {
+                    JSON.parse(rawBody);
+                    bodyToSend = rawBody;
+                } catch(e) { alert("Ungültiges JSON"); return; }
+            } else if(contentType === 'application/x-www-form-urlencoded') {
+                // versuche es als URL-encoded zu interpretieren (einfach)
+                bodyToSend = rawBody;
+            } else {
+                bodyToSend = rawBody;
+            }
+        }
+        const headers = new Headers();
+        headers.set('Content-Type', contentType);
+        customHeaders.forEach(h => { if(h.key && h.value) headers.set(h.key, h.value); });
+        const requestOptions = { method, headers };
+        if(bodyToSend) requestOptions.body = bodyToSend;
+        const responseDiv = document.getElementById('responseContainer');
+        responseDiv.innerHTML = "<i class='fas fa-spinner fa-pulse'></i> Sende Anfrage...";
+        try {
+            const start = Date.now();
+            const response = await fetch(url, requestOptions);
+            const responseText = await response.text();
+            const duration = Date.now() - start;
+            let pretty = responseText;
+            if(response.headers.get('content-type')?.includes('application/json')) {
+                try { pretty = JSON.stringify(JSON.parse(responseText), null, 2); } catch(e) {}
+            }
+            responseDiv.innerHTML = `
+                <div><span class="badge">Status: ${response.status} ${response.statusText}</span>  <span class="badge">⚡ ${duration}ms</span></div>
+                <hr><pre style="white-space:pre-wrap;font-family:monospace;">${escapeHtml(pretty)}</pre>
+            `;
+            addToHistory(method, url, response.status, response.ok);
+        } catch(err) {
+            responseDiv.innerHTML = `<span style="color:#ff7b72;"><i class="fas fa-exclamation-triangle"></i> Fehler: ${escapeHtml(err.message)}<br>Hinweis: Möglicherweise CORS-Block oder ungültige URL.</span>`;
+            addToHistory(method, url, "CORS/Netzwerkfehler", false);
+        }
+    }
+    
+    function initWebhookSenderUI() {
+        // Standard headers
+        if(customHeaders.length === 0) customHeaders = [{key:"User-Agent", value:"WebhookGalaxySender/1.0"}];
+        renderHeadersUI();
+        document.getElementById('addHeaderBtn').onclick = () => addHeader();
+        document.getElementById('sendWebhookBtn').onclick = () => sendWebhook();
+        document.getElementById('prettyJsonBtn').onclick = () => {
+            const bodyTA = document.getElementById('requestBody');
+            try {
+                const parsed = JSON.parse(bodyTA.value);
+                bodyTA.value = JSON.stringify(parsed, null, 2);
+            } catch(e) { alert("Kein valides JSON zum Formatieren"); }
+        };
+        document.getElementById('clearBodyBtn').onclick = () => document.getElementById('requestBody').value = '';
+        document.getElementById('savePresetBtn').onclick = savePreset;
+        document.getElementById('loadPresetBtn').onclick = loadPreset;
+        document.getElementById('clearHistoryBtn').onclick = () => {
+            requestHistory = [];
+            localStorage.removeItem(HISTORY_KEY);
+            renderHistory();
+        };
+        const storedHistory = localStorage.getItem(HISTORY_KEY);
+        if(storedHistory) try { requestHistory = JSON.parse(storedHistory); renderHistory(); } catch(e){}
+    }
+    
+    function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    
+    // Start: OAuth Handler + UI
+    window.onload = () => {
+        handleOAuthRedirect();
+    };
+</script>
+</body>
+</html>
