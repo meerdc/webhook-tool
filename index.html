@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Ultra Webhook Sender • Discord OAuth2 Secure</title>
-    <!-- Google Font & einfache Icons (Font Awesome CDN für bessere Icons) -->
+    <title>Ultra Webhook Designer • Discord OAuth2 • Grafisch + Advanced</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -13,21 +12,16 @@
             box-sizing: border-box;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
-
         body {
             background: linear-gradient(145deg, #0a0c12 0%, #0f1117 100%);
             min-height: 100vh;
             padding: 2rem 1.5rem;
             color: #eef2ff;
         }
-
-        /* Container */
         .app-container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
-
-        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -44,11 +38,6 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: -0.5px;
-        }
-        .logo p {
-            font-size: 0.8rem;
-            color: #8b93b0;
         }
         .user-area {
             background: #1e212b;
@@ -57,7 +46,6 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            backdrop-filter: blur(4px);
         }
         .avatar {
             width: 36px;
@@ -72,11 +60,6 @@
             border-radius: 30px;
             color: white;
             cursor: pointer;
-            font-weight: 500;
-            transition: 0.2s;
-        }
-        .btn-logout:hover, .btn-login:hover {
-            background: #3a3f4e;
         }
         .btn-primary {
             background: #5865f2;
@@ -88,10 +71,7 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        .btn-primary:hover {
-            background: #4752c4;
-            transform: scale(0.98);
-        }
+        .btn-primary:hover { background: #4752c4; transform: scale(0.98); }
         .btn-secondary {
             background: #2e3440;
             border: 1px solid #3b4252;
@@ -100,7 +80,6 @@
             color: #d8dee9;
             cursor: pointer;
         }
-        /* Cards */
         .card {
             background: rgba(30, 34, 48, 0.75);
             backdrop-filter: blur(6px);
@@ -108,23 +87,14 @@
             border: 1px solid rgba(88, 101, 242, 0.25);
             padding: 1.5rem;
             margin-bottom: 1.8rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-        }
-        .card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
         .grid-2col {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.8rem;
         }
-        @media (max-width: 780px) {
+        @media (max-width: 860px) {
             .grid-2col { grid-template-columns: 1fr; }
-            body { padding: 1rem; }
         }
         .input-group {
             margin-bottom: 1.2rem;
@@ -144,34 +114,62 @@
             padding: 12px 16px;
             color: #f0f3ff;
             font-size: 0.9rem;
-            transition: 0.2s;
         }
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #5865f2;
-            box-shadow: 0 0 0 2px rgba(88,101,242,0.3);
         }
-        textarea {
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            resize: vertical;
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #2d3150;
         }
-        .headers-list {
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #9ca3cf;
+            cursor: pointer;
+            border-radius: 30px 30px 0 0;
+            transition: 0.2s;
+        }
+        .tab-btn.active {
+            color: white;
+            background: #2c2f3a;
+            border-bottom: 2px solid #5865f2;
+        }
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        .embed-builder {
             background: #0b0e14;
             border-radius: 20px;
-            padding: 0.8rem;
+            padding: 1rem;
             margin-bottom: 1rem;
         }
-        .header-row {
+        .embed-header {
             display: flex;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 12px;
+        }
+        .field-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
             align-items: center;
         }
-        .header-row input {
+        .field-row input {
             flex: 1;
             margin-bottom: 0;
         }
-        .remove-header {
+        .remove-field {
             background: #b91c1c80;
             border: none;
             color: white;
@@ -180,14 +178,14 @@
             height: 32px;
             cursor: pointer;
         }
-        .add-header-btn {
+        .add-btn {
             background: #2c2f3a;
             border: 1px dashed #5865f2;
-            padding: 8px;
+            padding: 6px;
             border-radius: 30px;
             width: 100%;
-            margin-top: 8px;
             cursor: pointer;
+            margin-top: 8px;
         }
         .response-area {
             background: #05070c;
@@ -204,21 +202,12 @@
             border-radius: 30px;
             padding: 4px 12px;
             font-size: 0.7rem;
-            font-weight: bold;
         }
         .flex-btns {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
             margin-top: 10px;
-        }
-        .history-item {
-            background: #0f111a;
-            border-radius: 14px;
-            padding: 8px 12px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            font-size: 0.8rem;
         }
         .alert {
             background: #f97316cc;
@@ -227,15 +216,8 @@
             border-radius: 16px;
             margin-bottom: 1rem;
         }
-        .login-wall {
-            text-align: center;
-            padding: 4rem 1rem;
-        }
         .hidden {
             display: none;
-        }
-        i {
-            margin-right: 8px;
         }
         hr {
             border-color: #2d3150;
@@ -245,37 +227,43 @@
             font-size: 0.8rem;
             color: #9ca3cf;
         }
+        .color-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid white;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 <div class="app-container" id="appRoot">
     <div class="header">
         <div class="logo">
-            <h1><i class="fas fa-paper-plane"></i> Webhook Galaxy Sender</h1>
-            <p>Extreme Features · Discord OAuth2 gesichert · Member-Only</p>
+            <h1><i class="fas fa-palette"></i> Webhook Designer Pro</h1>
+            <p>Grafischer Editor + Advanced JSON • Discord OAuth2 geschützt</p>
         </div>
         <div id="authWidget"></div>
     </div>
 
-    <!-- UNAUTHENTICATED VIEW (Login screen) -->
+    <!-- Unauthenticated View -->
     <div id="unauthedView" class="login-wall card">
         <i class="fab fa-discord" style="font-size: 3rem; color:#5865f2;"></i>
-        <h2 style="margin-top: 1rem;">Discord Authentifizierung erforderlich</h2>
-        <p style="margin: 1rem 0;">Du musst dich mit Discord anmelden und Mitglied des <strong>autorisierten Servers</strong> sein, um den vollen Webhook-Sender nutzen zu können.<br>Logins werden zur Sicherheit protokolliert.</p>
-        <button id="discordLoginBtn" class="btn-primary" style="font-size: 1.1rem;"><i class="fab fa-discord"></i> Mit Discord anmelden</button>
-        <div class="status-text" style="margin-top: 1rem;">⚙️ PKCE OAuth2 · Server Mitgliedschaftsprüfung</div>
+        <h2>Discord Authentifizierung</h2>
+        <p>Nur Mitglieder des autorisierten Servers können den Webhook-Sender nutzen.<br>Logins werden protokolliert.</p>
+        <button id="discordLoginBtn" class="btn-primary"><i class="fab fa-discord"></i> Mit Discord anmelden</button>
     </div>
 
-    <!-- AUTHENTICATED VIEW (Webhook Sender + Features) -->
+    <!-- Authenticated View -->
     <div id="authedView" class="hidden">
         <div id="guildCheckMsg" class="alert hidden"></div>
         <div class="grid-2col">
-            <!-- Linke Spalte: Webhook Konfiguration -->
+            <!-- Linke Spalte: Webhook Konfiguration + Editor -->
             <div class="card">
-                <h3><i class="fas fa-cog"></i> Webhook Konfiguration</h3>
+                <h3><i class="fas fa-cog"></i> Webhook-Einstellungen</h3>
                 <div class="input-group">
-                    <label><i class="fas fa-link"></i> Ziel-Webhook URL *</label>
-                    <input type="url" id="webhookUrl" placeholder="https://discord.com/api/webhooks/... oder beliebiger Endpunkt" value="https://discord.com/api/webhooks/example">
+                    <label><i class="fas fa-link"></i> Webhook URL *</label>
+                    <input type="url" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
                 </div>
                 <div class="input-group">
                     <label><i class="fas fa-globe"></i> HTTP Methode</label>
@@ -284,92 +272,107 @@
                         <option value="PUT">PUT</option>
                         <option value="PATCH">PATCH</option>
                         <option value="DELETE">DELETE</option>
-                        <option value="GET">GET</option>
                     </select>
                 </div>
                 <div class="input-group">
-                    <label><i class="fas fa-code"></i> Content-Type</label>
-                    <select id="contentTypeSelect">
-                        <option value="application/json">application/json</option>
-                        <option value="application/x-www-form-urlencoded">x-www-form-urlencoded</option>
-                        <option value="text/plain">text/plain</option>
-                    </select>
+                    <label><i class="fas fa-hourglass-half"></i> Verzögerung (ms)</label>
+                    <input type="number" id="delayMs" value="0" step="100" placeholder="0 = sofort">
                 </div>
                 <div class="input-group">
-                    <label><i class="fas fa-heading"></i> Request Body (Payload)</label>
-                    <textarea id="requestBody" rows="6" placeholder='{"content": "Hallo Welt!", "embeds": []}'></textarea>
-                    <div class="flex-btns">
-                        <button id="prettyJsonBtn" class="btn-secondary" type="button"><i class="fas fa-magic"></i> JSON formatieren</button>
-                        <button id="clearBodyBtn" class="btn-secondary" type="button"><i class="fas fa-trash"></i> Leeren</button>
+                    <label><i class="fas fa-repeat"></i> Wiederholungen (Retry bei Fehler)</label>
+                    <input type="number" id="retryCount" value="0" min="0" max="5">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-plus-circle"></i> Query-Parameter (GET-Art, z.B. ?key=value)</label>
+                    <div id="queryParamsContainer" class="headers-list"></div>
+                    <button id="addQueryParamBtn" class="add-btn"><i class="fas fa-plus"></i> Query-Parameter hinzufügen</button>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-heading"></i> Zusätzliche Header</label>
+                    <div id="headersContainer" class="headers-list"></div>
+                    <button id="addHeaderBtn" class="add-btn"><i class="fas fa-plus"></i> Header hinzufügen</button>
+                </div>
+                
+                <h3><i class="fas fa-edit"></i> Payload-Editor</h3>
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="graphical">🎨 Grafisch (Einfach)</button>
+                    <button class="tab-btn" data-tab="advanced">⚡ Advanced (JSON)</button>
+                </div>
+                
+                <!-- Grafischer Modus -->
+                <div id="graphicalTab" class="tab-pane active">
+                    <div class="input-group">
+                        <label><i class="fas fa-comment"></i> Nachrichteninhalt (Content)</label>
+                        <textarea id="contentField" rows="3" placeholder="Normale Textnachricht..."></textarea>
+                    </div>
+                    <div id="embedsContainer"></div>
+                    <button id="addEmbedBtn" class="add-btn"><i class="fas fa-plus"></i> Embed hinzufügen</button>
+                    <div class="input-group" style="margin-top: 1rem;">
+                        <label><i class="fas fa-microphone-alt"></i> TTS (Text-to-Speech)</label>
+                        <select id="ttsSelect"><option value="false">Nein</option><option value="true">Ja</option></select>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-thumbtack"></i> Nachricht anpinnen (nur wenn Webhook in Kanal)</label>
+                        <select id="pinMessage"><option value="false">Nein</option><option value="true">Ja</option></select>
                     </div>
                 </div>
-                <div class="input-group">
-                    <label><i class="fas fa-bolt"></i> Zusätzliche Header (Key-Value)</label>
-                    <div id="headersContainer" class="headers-list"></div>
-                    <button id="addHeaderBtn" class="add-header-btn"><i class="fas fa-plus"></i> Header hinzufügen</button>
+                
+                <!-- Advanced JSON Modus -->
+                <div id="advancedTab" class="tab-pane">
+                    <div class="input-group">
+                        <label><i class="fas fa-code"></i> Roher JSON-Body</label>
+                        <textarea id="rawJsonBody" rows="12" placeholder='{"content": "Hallo", "embeds": [{"title": "Test"}]}'></textarea>
+                        <div class="flex-btns">
+                            <button id="prettyJsonBtn" class="btn-secondary"><i class="fas fa-magic"></i> Formatieren</button>
+                            <button id="validateJsonBtn" class="btn-secondary"><i class="fas fa-check-circle"></i> Validieren</button>
+                            <button id="syncFromGraphicalBtn" class="btn-secondary"><i class="fas fa-sync-alt"></i> Aus grafischem Modus übernehmen</button>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="flex-btns">
                     <button id="sendWebhookBtn" class="btn-primary"><i class="fas fa-paper-plane"></i> WEBHOOK SENDEN</button>
-                    <button id="savePresetBtn" class="btn-secondary"><i class="fas fa-save"></i> Als Preset speichern</button>
-                    <button id="loadPresetBtn" class="btn-secondary"><i class="fas fa-folder-open"></i> Letztes Preset laden</button>
+                    <button id="savePresetBtn" class="btn-secondary"><i class="fas fa-save"></i> Preset speichern</button>
+                    <button id="loadPresetBtn" class="btn-secondary"><i class="fas fa-folder-open"></i> Preset laden</button>
                 </div>
             </div>
-
-            <!-- Rechte Spalte: Response & History & Infos -->
+            
+            <!-- Rechte Spalte: Response, Verlauf, Status -->
             <div class="card">
                 <h3><i class="fas fa-chart-line"></i> Antwort / Logs</h3>
-                <div id="responseContainer" class="response-area">
-                    💡 Hier erscheint die Server-Antwort nach dem Senden.
-                </div>
-                <h3 style="margin-top: 1rem;"><i class="fas fa-history"></i> Request Verlauf (lokal)</h3>
-                <div id="historyList" class="history-list" style="max-height: 200px; overflow-y: auto;">
-                    — Noch keine Anfragen —
-                </div>
+                <div id="responseContainer" class="response-area">📡 Hier erscheint die Server-Antwort</div>
+                <h3 style="margin-top: 1rem;"><i class="fas fa-history"></i> Anfragen-Verlauf</h3>
+                <div id="historyList" style="max-height: 200px; overflow-y: auto;"></div>
                 <button id="clearHistoryBtn" class="btn-secondary" style="margin-top: 8px;"><i class="fas fa-eraser"></i> Verlauf löschen</button>
                 <hr>
-                <div class="status-text">
-                    <i class="fas fa-shield-alt"></i> Auth: Discord OAuth2 (PKCE) · Server-ID geprüft · Logins werden an sicheren Webhook gemeldet
-                </div>
+                <div class="status-text"><i class="fas fa-shield-alt"></i> Geschützt via Discord OAuth2 · Server-Mitgliedschaft · Login-Logging</div>
             </div>
-        </div>
-        <div class="card" style="margin-top: 0.5rem;">
-            <h3><i class="fas fa-question-circle"></i> Features / Hinweise</h3>
-            <ul style="margin-left: 1.5rem; color: #b9c3e6;">
-                <li>✅ Discord Login mit PKCE – kein Backend nötig</li>
-                <li>✅ Nur Mitglieder eines bestimmten Servers können senden</li>
-                <li>✅ Login-Logging (Username, ID, Zeit) an privaten Webhook (hardcoded)</li>
-                <li>✅ Dynamische Header, Methoden, Body-Typen & Live Response</li>
-                <li>✅ Presets / Verlauf speichern (lokal)</li>
-                <li>✅ CORS-Einschränkungen können auftreten – für Discord Webhooks funktioniert es meist</li>
-            </ul>
         </div>
     </div>
 </div>
 
 <script>
-    // ======================== KONFIGURATION (BITTE ANPASSEN) ========================
-    // Discord OAuth2 Client ID - HIER DEINE EIGENE EINTRAGEN (Discord Developer Portal)
-    const DISCORD_CLIENT_ID = "1515748206628176004";    // <-- ersetzen mit echter Client ID
-    // Ziel-Guild (Server), dessen Mitgliedschaft erforderlich ist
-    const REQUIRED_GUILD_ID = "1397535974476480613";     // <-- z.B. "123456789012345678"
-    // PRIVATER LOG-WEBHOOK (hardcoded für Login-Tracking) – HIER EIGENE DISCORD WEBHOOK URL EINTRAGEN!
-    const PRIVATE_LOG_WEBHOOK = "https://discord.com/api/webhooks/1515747821599592458/Bv9_EUALdbJnRgAD1lhh47cw0C7RSKc-pbxrFOo7Mdst_dWLE-Kzjr4aHLUpkYVTasnO"; 
-    // Dynamische Redirect URI (aktuelle Seite)
-    const REDIRECT_URI = window.location.href.split('?')[0]; 
+    // ========== KONFIGURATION (vom Benutzer anzupassen) ==========
+    const DISCORD_CLIENT_ID = "1515748206628176004";      // Discord Developer Application Client ID
+    const REQUIRED_GUILD_ID = "1397535974476480613";      // Server-ID, der Mitglied sein muss
+    const PRIVATE_LOG_WEBHOOK = "https://discord.com/api/webhooks/1515747821599592458/Bv9_EUALdbJnRgAD1lhh47cw0C7RSKc-pbxrFOo7Mdst_dWLE-Kzjr4aHLUpkYVTasnO"; // Login-Log Webhook
+    const REDIRECT_URI = window.location.href.split('?')[0];
     
     // Globale Variablen
-    let accessToken = null;
-    let currentUser = null;      // { id, username, avatar }
-    let userGuilds = [];
-    let isMemberAllowed = false;
+    let accessToken = null, currentUser = null, userGuilds = [], isMemberAllowed = false;
+    let customHeaders = [], queryParams = [];
+    let embeds = []; // Speichert Embed-Objekte für grafischen Modus
+    let requestHistory = [];
+    const HISTORY_KEY = "wh_designer_history";
+    const PRESET_KEY = "wh_designer_preset";
     
-    // UI Elemente
+    // DOM-Elemente
     const unauthedDiv = document.getElementById('unauthedView');
     const authedDiv = document.getElementById('authedView');
     const authWidget = document.getElementById('authWidget');
     const guildCheckMsg = document.getElementById('guildCheckMsg');
     
-    // ------------------------ PKCE HELPER ---------------------------------
+    // ========== PKCE OAuth2 ==========
     async function generateCodeVerifier() {
         const array = new Uint8Array(32);
         crypto.getRandomValues(array);
@@ -381,357 +384,352 @@
         const digest = await crypto.subtle.digest('SHA-256', data);
         return btoa(String.fromCharCode(...new Uint8Array(digest))).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
     }
-    
-    // Discord OAuth2 URL erstellen
     async function redirectToDiscordAuth() {
         const verifier = await generateCodeVerifier();
         sessionStorage.setItem('pkce_verifier', verifier);
         const challenge = await generateCodeChallenge(verifier);
         const params = new URLSearchParams({
-            client_id: DISCORD_CLIENT_ID,
-            response_type: 'code',
-            redirect_uri: REDIRECT_URI,
-            scope: 'identify guilds',
-            code_challenge_method: 'S256',
-            code_challenge: challenge
+            client_id: DISCORD_CLIENT_ID, response_type: 'code', redirect_uri: REDIRECT_URI,
+            scope: 'identify guilds', code_challenge_method: 'S256', code_challenge: challenge
         });
         window.location.href = `https://discord.com/api/oauth2/authorize?${params.toString()}`;
     }
-    
-    // Token austauschen (PKCE)
     async function exchangeCodeForToken(code, verifier) {
-        const body = new URLSearchParams({
-            client_id: DISCORD_CLIENT_ID,
-            grant_type: 'authorization_code',
-            code: code,
-            redirect_uri: REDIRECT_URI,
-            code_verifier: verifier
-        });
-        const resp = await fetch('https://discord.com/api/oauth2/token', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: body.toString()
-        });
+        const body = new URLSearchParams({ client_id: DISCORD_CLIENT_ID, grant_type: 'authorization_code', code, redirect_uri: REDIRECT_URI, code_verifier: verifier });
+        const resp = await fetch('https://discord.com/api/oauth2/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
         if (!resp.ok) throw new Error('Token exchange failed');
         const data = await resp.json();
         return data.access_token;
     }
-    
-    // User Info + Guilds fetchen
     async function fetchUserData(token) {
-        const userResp = await fetch('https://discord.com/api/users/@me', {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        const userResp = await fetch('https://discord.com/api/users/@me', { headers: { Authorization: `Bearer ${token}` } });
         if (!userResp.ok) throw new Error('User fetch failed');
         const user = await userResp.json();
-        const guildsResp = await fetch('https://discord.com/api/users/@me/guilds', {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        const guildsResp = await fetch('https://discord.com/api/users/@me/guilds', { headers: { Authorization: `Bearer ${token}` } });
         if (!guildsResp.ok) throw new Error('Guilds fetch failed');
         const guilds = await guildsResp.json();
         return { user, guilds };
     }
-    
-    // Prüfen ob User in required guild ist
-    function checkGuildMembership(guilds, requiredId) {
-        return guilds.some(g => g.id === requiredId);
-    }
-    
-    // LOGIN LOGGING an privaten Webhook (hardcoded)
     async function sendLoginLog(user, success, reason = "") {
-        if (!PRIVATE_LOG_WEBHOOK || PRIVATE_LOG_WEBHOOK.includes("your/loghook")) {
-            console.warn("⚠️ Kein gültiger Log-Webhook konfiguriert (bitte PRIVATE_LOG_WEBHOOK setzen)");
-            return;
-        }
+        if (!PRIVATE_LOG_WEBHOOK || PRIVATE_LOG_WEBHOOK.includes("your/loghook")) return;
         const embed = {
-            title: success ? "✅ Webhook Sender Login" : "❌ Login versuch (Zugriff verweigert)",
+            title: success ? "✅ Webhook Login" : "❌ Zugriff verweigert",
             color: success ? 0x57F287 : 0xED4245,
             fields: [
                 { name: "Benutzer", value: `${user.username} (${user.id})`, inline: true },
-                { name: "Zeitstempel", value: new Date().toISOString(), inline: true },
-                { name: "Zugriff erlaubt", value: success ? "Ja" : `Nein - ${reason}`, inline: false }
-            ],
-            footer: { text: "Webhook Galaxy Sender · Login Tracker" }
+                { name: "Zeit", value: new Date().toISOString(), inline: true },
+                { name: "Erlaubt", value: success ? "Ja" : `Nein - ${reason}`, inline: false }
+            ]
         };
-        try {
-            await fetch(PRIVATE_LOG_WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ embeds: [embed] })
-            });
-        } catch(e) { console.error("Logging fehlgeschlagen", e); }
+        try { await fetch(PRIVATE_LOG_WEBHOOK, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ embeds: [embed] }) }); } catch(e) {}
     }
-    
-    // Login Flow: Code aus URL holen
     async function handleOAuthRedirect() {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
         if (code) {
             const verifier = sessionStorage.getItem('pkce_verifier');
-            if (!verifier) {
-                showError("Kein PKCE Verifier gefunden, starte neu.");
-                window.history.replaceState({}, document.title, window.location.pathname);
-                return;
-            }
+            if (!verifier) return;
             try {
                 const token = await exchangeCodeForToken(code, verifier);
                 accessToken = token;
                 const { user, guilds } = await fetchUserData(token);
                 currentUser = user;
                 userGuilds = guilds;
-                const member = checkGuildMembership(guilds, REQUIRED_GUILD_ID);
+                const member = guilds.some(g => g.id === REQUIRED_GUILD_ID);
                 isMemberAllowed = member;
-                // Login loggen (mit oder ohne Berechtigung)
-                await sendLoginLog(user, member, member ? "" : "User nicht im erforderlichen Server");
+                await sendLoginLog(user, member, member ? "" : "Nicht im erforderlichen Server");
                 if (!member) {
-                    showGuildError(`⛔ Zugriff verweigert: Du bist nicht Mitglied des erforderlichen Servers (ID: ${REQUIRED_GUILD_ID}).`);
-                    accessToken = null;
-                    renderAuthState();
+                    guildCheckMsg.innerText = `⛔ Zugriff verweigert: Du bist nicht im erforderlichen Server (ID: ${REQUIRED_GUILD_ID}).`;
+                    guildCheckMsg.classList.remove('hidden');
+                    authedDiv.classList.add('hidden');
+                    unauthedDiv.classList.remove('hidden');
                 } else {
-                    // Erfolgreich authentifiziert & Mitglied
                     renderAuthState();
-                    initWebhookSenderUI();
+                    initApp();
                 }
-                // Code aus URL entfernen
                 window.history.replaceState({}, document.title, window.location.pathname);
-            } catch (err) {
-                console.error(err);
-                showError("OAuth2 Fehler: " + err.message);
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-        } else {
-            // eventuell vorhandener token? nicht persistiert -> muss neu einloggen
-            renderAuthState();
-        }
-    }
-    
-    function showGuildError(msg) {
-        guildCheckMsg.innerText = msg;
-        guildCheckMsg.classList.remove('hidden');
-        authedDiv.classList.add('hidden');
-        unauthedDiv.classList.remove('hidden');
-    }
-    function showError(msg) {
-        alert(msg);
+            } catch (err) { console.error(err); alert("OAuth Fehler"); }
+        } else { renderAuthState(); }
     }
     function renderAuthState() {
         if (accessToken && isMemberAllowed && currentUser) {
             unauthedDiv.classList.add('hidden');
             authedDiv.classList.remove('hidden');
-            guildCheckMsg.classList.add('hidden');
-            // Widget anzeigen (Userinfo)
-            authWidget.innerHTML = `
-                <div class="user-area">
-                    <img class="avatar" src="https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png?size=32" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
-                    <span style="font-weight:500;">${currentUser.username}</span>
-                    <button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
-                </div>
-            `;
-            document.getElementById('logoutBtn')?.addEventListener('click', () => {
-                accessToken = null;
-                currentUser = null;
-                isMemberAllowed = false;
-                renderAuthState();
-                location.reload(); // clean reload
-            });
+            authWidget.innerHTML = `<div class="user-area"><img class="avatar" src="https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png?size=32" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"><span>${currentUser.username}</span><button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button></div>`;
+            document.getElementById('logoutBtn')?.addEventListener('click', () => { accessToken = null; location.reload(); });
         } else {
             authedDiv.classList.add('hidden');
             unauthedDiv.classList.remove('hidden');
-            authWidget.innerHTML = `<button id="loginHeaderBtn" class="btn-primary"><i class="fab fa-discord"></i> Anmelden</button>`;
-            const loginBtn = document.getElementById('loginHeaderBtn');
-            if(loginBtn) loginBtn.onclick = () => redirectToDiscordAuth();
             document.getElementById('discordLoginBtn')?.addEventListener('click', () => redirectToDiscordAuth());
         }
     }
     
-    // ---------- Webhook Sender Kern (umfangreich) ----------
-    let customHeaders = []; // {key, value}
-    let requestHistory = [];
-    const HISTORY_KEY = "wh_sender_history";
-    const PRESET_KEY = "wh_sender_preset";
-    
-    function renderHeadersUI() {
-        const container = document.getElementById('headersContainer');
+    // ========== GRAFISCHER EDITOR: EMBEDS, FIELDS ==========
+    function renderEmbedsUI() {
+        const container = document.getElementById('embedsContainer');
+        if (!container) return;
         container.innerHTML = '';
-        customHeaders.forEach((h, idx) => {
-            const row = document.createElement('div');
-            row.className = 'header-row';
-            row.innerHTML = `
-                <input type="text" placeholder="Header-Name (z.B. Authorization)" value="${escapeHtml(h.key)}" data-header-key="${idx}">
-                <input type="text" placeholder="Wert" value="${escapeHtml(h.value)}" data-header-val="${idx}">
-                <button class="remove-header" data-idx="${idx}"><i class="fas fa-times"></i></button>
+        embeds.forEach((embed, idx) => {
+            const div = document.createElement('div');
+            div.className = 'embed-builder';
+            div.innerHTML = `
+                <div class="embed-header"><strong>Embed ${idx+1}</strong><button class="remove-embed btn-secondary" data-idx="${idx}"><i class="fas fa-trash"></i> Entfernen</button></div>
+                <div class="input-group"><label>Titel</label><input type="text" class="embed-title" data-idx="${idx}" value="${escapeHtml(embed.title || '')}"></div>
+                <div class="input-group"><label>Beschreibung</label><textarea class="embed-desc" data-idx="${idx}" rows="2">${escapeHtml(embed.description || '')}</textarea></div>
+                <div class="input-group"><label>Farbe (Hex, z.B. #5865F2)</label><input type="text" class="embed-color" data-idx="${idx}" value="${embed.color || '#5865f2'}"></div>
+                <div class="input-group"><label>Autor Name</label><input type="text" class="embed-author" data-idx="${idx}" value="${escapeHtml(embed.author?.name || '')}"></div>
+                <div class="input-group"><label>Footer Text</label><input type="text" class="embed-footer" data-idx="${idx}" value="${escapeHtml(embed.footer?.text || '')}"></div>
+                <div><label>Felder (Fields)</label><div class="fields-container-${idx}" id="fields-container-${idx}"></div><button class="add-field-btn" data-idx="${idx}"><i class="fas fa-plus"></i> Feld hinzufügen</button></div>
             `;
+            container.appendChild(div);
+            
+            // Felder rendern
+            const fieldsContainer = document.getElementById(`fields-container-${idx}`);
+            const fields = embed.fields || [];
+            fields.forEach((field, fIdx) => {
+                const fieldRow = document.createElement('div');
+                fieldRow.className = 'field-row';
+                fieldRow.innerHTML = `
+                    <input type="text" placeholder="Name" class="field-name" data-embed="${idx}" data-field="${fIdx}" value="${escapeHtml(field.name || '')}">
+                    <input type="text" placeholder="Wert" class="field-value" data-embed="${idx}" data-field="${fIdx}" value="${escapeHtml(field.value || '')}">
+                    <input type="checkbox" class="field-inline" data-embed="${idx}" data-field="${fIdx}" ${field.inline ? 'checked' : ''}> <span style="font-size:0.7rem;">inline</span>
+                    <button class="remove-field" data-embed="${idx}" data-field="${fIdx}"><i class="fas fa-times"></i></button>
+                `;
+                fieldsContainer.appendChild(fieldRow);
+            });
+            
+            // Eventlistener für dynamische Felder
+            div.querySelector('.add-field-btn').addEventListener('click', (e) => {
+                if (!embeds[idx].fields) embeds[idx].fields = [];
+                embeds[idx].fields.push({ name: "", value: "", inline: false });
+                renderEmbedsUI();
+            });
+            div.querySelector('.remove-embed').addEventListener('click', () => { embeds.splice(idx,1); renderEmbedsUI(); });
+        });
+        attachEmbedInputEvents();
+    }
+    function attachEmbedInputEvents() {
+        document.querySelectorAll('.embed-title').forEach(inp => inp.addEventListener('change', (e) => { let idx = inp.dataset.idx; embeds[idx].title = inp.value; updateAdvancedJsonFromGraphical(); }));
+        document.querySelectorAll('.embed-desc').forEach(ta => ta.addEventListener('change', (e) => { let idx = ta.dataset.idx; embeds[idx].description = ta.value; updateAdvancedJsonFromGraphical(); }));
+        document.querySelectorAll('.embed-color').forEach(inp => inp.addEventListener('change', (e) => { let idx = inp.dataset.idx; embeds[idx].color = inp.value; updateAdvancedJsonFromGraphical(); }));
+        document.querySelectorAll('.embed-author').forEach(inp => inp.addEventListener('change', (e) => { let idx = inp.dataset.idx; if(!embeds[idx].author) embeds[idx].author={}; embeds[idx].author.name = inp.value; updateAdvancedJsonFromGraphical(); }));
+        document.querySelectorAll('.embed-footer').forEach(inp => inp.addEventListener('change', (e) => { let idx = inp.dataset.idx; if(!embeds[idx].footer) embeds[idx].footer={}; embeds[idx].footer.text = inp.value; updateAdvancedJsonFromGraphical(); }));
+        // Feld-Änderungen via Event-Delegation (werden dynamisch neu erstellt)
+        document.querySelectorAll('.field-name, .field-value, .field-inline').forEach(el => {
+            el.removeEventListener('change', handleFieldChange);
+            el.addEventListener('change', handleFieldChange);
+        });
+        document.querySelectorAll('.remove-field').forEach(btn => {
+            btn.removeEventListener('click', handleRemoveField);
+            btn.addEventListener('click', handleRemoveField);
+        });
+    }
+    function handleFieldChange(e) {
+        const embedIdx = parseInt(e.target.dataset.embed);
+        const fieldIdx = parseInt(e.target.dataset.field);
+        if (isNaN(embedIdx) || isNaN(fieldIdx)) return;
+        if (e.target.classList.contains('field-name')) embeds[embedIdx].fields[fieldIdx].name = e.target.value;
+        else if (e.target.classList.contains('field-value')) embeds[embedIdx].fields[fieldIdx].value = e.target.value;
+        else if (e.target.classList.contains('field-inline')) embeds[embedIdx].fields[fieldIdx].inline = e.target.checked;
+        updateAdvancedJsonFromGraphical();
+    }
+    function handleRemoveField(e) {
+        const embedIdx = parseInt(e.target.dataset.embed);
+        const fieldIdx = parseInt(e.target.dataset.field);
+        if (!isNaN(embedIdx) && !isNaN(fieldIdx)) {
+            embeds[embedIdx].fields.splice(fieldIdx, 1);
+            renderEmbedsUI();
+            updateAdvancedJsonFromGraphical();
+        }
+    }
+    
+    // Erstellt JSON aus grafischen Eingaben
+    function buildPayloadFromGraphical() {
+        const content = document.getElementById('contentField').value;
+        const tts = document.getElementById('ttsSelect').value === 'true';
+        const pin = document.getElementById('pinMessage').value === 'true';
+        const embedObjects = embeds.map(emb => {
+            const e = { title: emb.title, description: emb.description, color: parseInt(emb.color?.replace('#','0x'), 16) || 0 };
+            if (emb.author?.name) e.author = { name: emb.author.name };
+            if (emb.footer?.text) e.footer = { text: emb.footer.text };
+            if (emb.fields && emb.fields.length) e.fields = emb.fields;
+            return e;
+        }).filter(e => e.title || e.description || (e.fields?.length));
+        const payload = { content, tts };
+        if (embedObjects.length) payload.embeds = embedObjects;
+        if (pin) payload.flags = 1 << 1; // SuppressEmbeds? Nein, wir nutzen pin-flag? Discord: Pinning über API erfordert separate Pin-Anfrage. Vereinfacht: Hinweis.
+        // Pinning ist extra - wir fügen nur Metainfo, aber Webhooks können nicht direkt pin? Umfasse es als custom property?
+        // Für Webhook-Sender reicht content/embeds.
+        return payload;
+    }
+    function updateAdvancedJsonFromGraphical() {
+        const payload = buildPayloadFromGraphical();
+        document.getElementById('rawJsonBody').value = JSON.stringify(payload, null, 2);
+    }
+    function syncFromGraphicalToAdvanced() {
+        updateAdvancedJsonFromGraphical();
+        alert("JSON wurde aus grafischem Modus aktualisiert.");
+    }
+    function syncFromAdvancedToGraphical() {
+        try {
+            const json = JSON.parse(document.getElementById('rawJsonBody').value);
+            document.getElementById('contentField').value = json.content || '';
+            document.getElementById('ttsSelect').value = json.tts ? 'true' : 'false';
+            if (json.embeds && Array.isArray(json.embeds)) {
+                embeds = json.embeds.map(e => ({
+                    title: e.title || '', description: e.description || '', color: e.color ? '#' + e.color.toString(16) : '#5865f2',
+                    author: e.author ? { name: e.author.name || '' } : {},
+                    footer: e.footer ? { text: e.footer.text || '' } : {},
+                    fields: e.fields || []
+                }));
+            } else { embeds = []; }
+            renderEmbedsUI();
+        } catch(e) { alert("Ungültiges JSON: " + e.message); }
+    }
+    
+    // ========== HEADER, QUERY PARAMS ==========
+    function renderDynamicList(containerId, items, onChangeCallback) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        items.forEach((item, idx) => {
+            const row = document.createElement('div');
+            row.className = 'field-row';
+            row.innerHTML = `<input type="text" placeholder="Name" data-key="${idx}" value="${escapeHtml(item.key)}"><input type="text" placeholder="Wert" data-val="${idx}" value="${escapeHtml(item.value)}"><button class="remove-field" data-idx="${idx}"><i class="fas fa-minus-circle"></i></button>`;
             container.appendChild(row);
         });
-        document.querySelectorAll('.remove-header').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.idx);
-                customHeaders.splice(idx, 1);
-                renderHeadersUI();
-            });
-        });
-        document.querySelectorAll('[data-header-key]').forEach(inp => {
-            inp.addEventListener('change', (e) => {
-                const idx = parseInt(inp.dataset.headerKey);
-                if (!isNaN(idx)) customHeaders[idx].key = inp.value;
-            });
-        });
-        document.querySelectorAll('[data-header-val]').forEach(inp => {
-            inp.addEventListener('change', (e) => {
-                const idx = parseInt(inp.dataset.headerVal);
-                if (!isNaN(idx)) customHeaders[idx].value = inp.value;
-            });
-        });
+        container.querySelectorAll('[data-key]').forEach(inp => inp.addEventListener('change', (e) => { const i = parseInt(inp.dataset.key); items[i].key = inp.value; if(onChangeCallback) onChangeCallback(); }));
+        container.querySelectorAll('[data-val]').forEach(inp => inp.addEventListener('change', (e) => { const i = parseInt(inp.dataset.val); items[i].value = inp.value; if(onChangeCallback) onChangeCallback(); }));
+        container.querySelectorAll('.remove-field').forEach(btn => btn.addEventListener('click', (e) => { const i = parseInt(btn.dataset.idx); items.splice(i,1); renderDynamicList(containerId, items, onChangeCallback); if(onChangeCallback) onChangeCallback(); }));
     }
     
-    function addHeader() {
-        customHeaders.push({ key: "", value: "" });
-        renderHeadersUI();
-    }
-    
-    function savePreset() {
-        const preset = {
-            url: document.getElementById('webhookUrl').value,
-            method: document.getElementById('httpMethod').value,
-            contentType: document.getElementById('contentTypeSelect').value,
-            body: document.getElementById('requestBody').value,
-            headers: customHeaders
+    // ========== WEBHOOK SENDEN MIT DELAY & RETRY ==========
+    async function sendWebhookWithOptions() {
+        if (!accessToken || !isMemberAllowed) { alert("Nicht autorisiert"); return; }
+        const urlRaw = document.getElementById('webhookUrl').value;
+        if (!urlRaw) { alert("Webhook URL fehlt"); return; }
+        let url = new URL(urlRaw);
+        queryParams.forEach(p => { if(p.key && p.value) url.searchParams.append(p.key, p.value); });
+        const method = document.getElementById('httpMethod').value;
+        const delay = parseInt(document.getElementById('delayMs').value) || 0;
+        const retries = parseInt(document.getElementById('retryCount').value) || 0;
+        
+        let bodyPayload = null;
+        const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
+        let bodyString = "";
+        if (activeTab === 'graphical') {
+            const payload = buildPayloadFromGraphical();
+            bodyString = JSON.stringify(payload);
+            bodyPayload = bodyString;
+        } else {
+            bodyString = document.getElementById('rawJsonBody').value;
+            try { JSON.parse(bodyString); bodyPayload = bodyString; } catch(e) { alert("Ungültiges JSON im Advanced-Modus"); return; }
+        }
+        const headers = new Headers({ 'Content-Type': 'application/json' });
+        customHeaders.forEach(h => { if(h.key && h.value) headers.set(h.key, h.value); });
+        const requestFunc = async () => {
+            const resp = await fetch(url.toString(), { method, headers, body: (method !== 'GET' && method !== 'DELETE') ? bodyPayload : undefined });
+            const text = await resp.text();
+            return { status: resp.status, ok: resp.ok, text };
         };
-        localStorage.setItem(PRESET_KEY, JSON.stringify(preset));
-        alert("Preset gespeichert!");
-    }
-    function loadPreset() {
-        const raw = localStorage.getItem(PRESET_KEY);
-        if(!raw) return alert("Kein gespeichertes Preset");
-        try {
-            const p = JSON.parse(raw);
-            document.getElementById('webhookUrl').value = p.url;
-            document.getElementById('httpMethod').value = p.method;
-            document.getElementById('contentTypeSelect').value = p.contentType;
-            document.getElementById('requestBody').value = p.body;
-            customHeaders = p.headers || [];
-            renderHeadersUI();
-        } catch(e){}
+        const responseDiv = document.getElementById('responseContainer');
+        responseDiv.innerHTML = `<i class="fas fa-spinner fa-pulse"></i> Sende (Verzögerung ${delay}ms, Wiederholungen ${retries})...`;
+        if (delay > 0) await new Promise(r => setTimeout(r, delay));
+        let lastError = null;
+        for (let attempt = 0; attempt <= retries; attempt++) {
+            try {
+                const result = await requestFunc();
+                const pretty = result.text.length > 500 ? result.text.substring(0,500)+"..." : result.text;
+                responseDiv.innerHTML = `<span class="badge">Status ${result.status}</span><pre style="margin-top:8px;">${escapeHtml(pretty)}</pre>`;
+                addToHistory(method, url.toString(), result.status, result.ok);
+                return;
+            } catch(err) {
+                lastError = err;
+                if (attempt < retries) await new Promise(r => setTimeout(r, 1000));
+            }
+        }
+        responseDiv.innerHTML = `<span style="color:#ff7b72;">Fehler nach ${retries+1} Versuchen: ${escapeHtml(lastError?.message)}</span>`;
+        addToHistory(method, url.toString(), "Netzwerkfehler", false);
     }
     
     function addToHistory(method, url, status, success) {
-        const entry = { method, url, status, success, timestamp: new Date().toLocaleString() };
-        requestHistory.unshift(entry);
+        requestHistory.unshift({ method, url, status, success, timestamp: new Date().toLocaleString() });
         if(requestHistory.length > 20) requestHistory.pop();
         localStorage.setItem(HISTORY_KEY, JSON.stringify(requestHistory));
         renderHistory();
     }
-    
     function renderHistory() {
         const historyDiv = document.getElementById('historyList');
         if(!historyDiv) return;
-        if(requestHistory.length === 0) {
-            historyDiv.innerHTML = '— Keine Anfragen —';
-            return;
-        }
-        historyDiv.innerHTML = requestHistory.map((h, idx) => `
-            <div class="history-item" data-idx="${idx}">
-                <strong>${h.method}</strong> ${h.url.substring(0, 50)}... <span style="color:${h.success ? '#57F287' : '#ED4245'}">${h.status}</span><br>
-                <small>${h.timestamp}</small>
-            </div>
-        `).join('');
-        // Klick zum Wiederherstellen
-        document.querySelectorAll('.history-item').forEach(el => {
-            el.addEventListener('click', (e) => {
-                const idx = el.dataset.idx;
-                if(idx !== undefined) {
-                    // nicht vollständige payload rekonstruieren, nur zur info
-                    alert("History-Log: Nur Metadaten gespeichert, bitte manuell wiederholen.");
-                }
-            });
-        });
+        if(requestHistory.length === 0) { historyDiv.innerHTML = '— Keine Anfragen —'; return; }
+        historyDiv.innerHTML = requestHistory.map(h => `<div class="history-item" style="background:#0f111a; border-radius:12px; padding:6px; margin-bottom:6px;"><strong>${h.method}</strong> ${h.url.substring(0,60)}... <span style="color:${h.success?'#57F287':'#ED4245'}">${h.status}</span><br><small>${h.timestamp}</small></div>`).join('');
     }
-    
-    async function sendWebhook() {
-        if(!accessToken || !isMemberAllowed) {
-            alert("Nicht authentifiziert oder keine Mitgliedschaft");
-            return;
-        }
-        const url = document.getElementById('webhookUrl').value;
-        if(!url || url.trim() === "") {
-            alert("Bitte Webhook URL eingeben");
-            return;
-        }
-        const method = document.getElementById('httpMethod').value;
-        let contentType = document.getElementById('contentTypeSelect').value;
-        let rawBody = document.getElementById('requestBody').value;
-        let bodyToSend = null;
-        if(method !== 'GET' && method !== 'DELETE') {
-            if(contentType === 'application/json') {
-                try {
-                    JSON.parse(rawBody);
-                    bodyToSend = rawBody;
-                } catch(e) { alert("Ungültiges JSON"); return; }
-            } else if(contentType === 'application/x-www-form-urlencoded') {
-                // versuche es als URL-encoded zu interpretieren (einfach)
-                bodyToSend = rawBody;
-            } else {
-                bodyToSend = rawBody;
-            }
-        }
-        const headers = new Headers();
-        headers.set('Content-Type', contentType);
-        customHeaders.forEach(h => { if(h.key && h.value) headers.set(h.key, h.value); });
-        const requestOptions = { method, headers };
-        if(bodyToSend) requestOptions.body = bodyToSend;
-        const responseDiv = document.getElementById('responseContainer');
-        responseDiv.innerHTML = "<i class='fas fa-spinner fa-pulse'></i> Sende Anfrage...";
-        try {
-            const start = Date.now();
-            const response = await fetch(url, requestOptions);
-            const responseText = await response.text();
-            const duration = Date.now() - start;
-            let pretty = responseText;
-            if(response.headers.get('content-type')?.includes('application/json')) {
-                try { pretty = JSON.stringify(JSON.parse(responseText), null, 2); } catch(e) {}
-            }
-            responseDiv.innerHTML = `
-                <div><span class="badge">Status: ${response.status} ${response.statusText}</span>  <span class="badge">⚡ ${duration}ms</span></div>
-                <hr><pre style="white-space:pre-wrap;font-family:monospace;">${escapeHtml(pretty)}</pre>
-            `;
-            addToHistory(method, url, response.status, response.ok);
-        } catch(err) {
-            responseDiv.innerHTML = `<span style="color:#ff7b72;"><i class="fas fa-exclamation-triangle"></i> Fehler: ${escapeHtml(err.message)}<br>Hinweis: Möglicherweise CORS-Block oder ungültige URL.</span>`;
-            addToHistory(method, url, "CORS/Netzwerkfehler", false);
-        }
-    }
-    
-    function initWebhookSenderUI() {
-        // Standard headers
-        if(customHeaders.length === 0) customHeaders = [{key:"User-Agent", value:"WebhookGalaxySender/1.0"}];
-        renderHeadersUI();
-        document.getElementById('addHeaderBtn').onclick = () => addHeader();
-        document.getElementById('sendWebhookBtn').onclick = () => sendWebhook();
-        document.getElementById('prettyJsonBtn').onclick = () => {
-            const bodyTA = document.getElementById('requestBody');
-            try {
-                const parsed = JSON.parse(bodyTA.value);
-                bodyTA.value = JSON.stringify(parsed, null, 2);
-            } catch(e) { alert("Kein valides JSON zum Formatieren"); }
+    function savePreset() {
+        const preset = {
+            url: document.getElementById('webhookUrl').value, method: document.getElementById('httpMethod').value,
+            delay: document.getElementById('delayMs').value, retries: document.getElementById('retryCount').value,
+            headers: customHeaders, queryParams: queryParams, embeds: embeds,
+            content: document.getElementById('contentField').value, tts: document.getElementById('ttsSelect').value,
+            rawJson: document.getElementById('rawJsonBody').value
         };
-        document.getElementById('clearBodyBtn').onclick = () => document.getElementById('requestBody').value = '';
+        localStorage.setItem(PRESET_KEY, JSON.stringify(preset));
+        alert("Preset gespeichert");
+    }
+    function loadPreset() {
+        const raw = localStorage.getItem(PRESET_KEY);
+        if(!raw) return alert("Kein Preset");
+        try {
+            const p = JSON.parse(raw);
+            document.getElementById('webhookUrl').value = p.url || "";
+            document.getElementById('httpMethod').value = p.method || "POST";
+            document.getElementById('delayMs').value = p.delay || 0;
+            document.getElementById('retryCount').value = p.retries || 0;
+            customHeaders = p.headers || [];
+            queryParams = p.queryParams || [];
+            embeds = p.embeds || [];
+            document.getElementById('contentField').value = p.content || "";
+            document.getElementById('ttsSelect').value = p.tts || "false";
+            document.getElementById('rawJsonBody').value = p.rawJson || "{}";
+            renderDynamicList('headersContainer', customHeaders, () => {});
+            renderDynamicList('queryParamsContainer', queryParams, () => {});
+            renderEmbedsUI();
+            updateAdvancedJsonFromGraphical();
+        } catch(e) { alert("Fehler beim Laden"); }
+    }
+    
+    function initApp() {
+        customHeaders = [{key:"User-Agent", value:"WebhookDesigner/2.0"}];
+        queryParams = [];
+        embeds = [];
+        renderDynamicList('headersContainer', customHeaders, () => {});
+        renderDynamicList('queryParamsContainer', queryParams, () => {});
+        renderEmbedsUI();
+        document.getElementById('addHeaderBtn').onclick = () => { customHeaders.push({key:"", value:""}); renderDynamicList('headersContainer', customHeaders, () => {}); };
+        document.getElementById('addQueryParamBtn').onclick = () => { queryParams.push({key:"", value:""}); renderDynamicList('queryParamsContainer', queryParams, () => {}); };
+        document.getElementById('addEmbedBtn').onclick = () => { embeds.push({ title:"", description:"", color:"#5865f2", fields:[] }); renderEmbedsUI(); updateAdvancedJsonFromGraphical(); };
+        document.getElementById('sendWebhookBtn').onclick = sendWebhookWithOptions;
         document.getElementById('savePresetBtn').onclick = savePreset;
         document.getElementById('loadPresetBtn').onclick = loadPreset;
-        document.getElementById('clearHistoryBtn').onclick = () => {
-            requestHistory = [];
-            localStorage.removeItem(HISTORY_KEY);
-            renderHistory();
-        };
+        document.getElementById('clearHistoryBtn').onclick = () => { requestHistory = []; localStorage.removeItem(HISTORY_KEY); renderHistory(); };
+        document.getElementById('prettyJsonBtn').onclick = () => { try { const obj = JSON.parse(document.getElementById('rawJsonBody').value); document.getElementById('rawJsonBody').value = JSON.stringify(obj, null, 2); } catch(e) { alert("Ungültiges JSON"); } };
+        document.getElementById('validateJsonBtn').onclick = () => { try { JSON.parse(document.getElementById('rawJsonBody').value); alert("✅ JSON gültig"); } catch(e) { alert("❌ Ungültig: "+e.message); } };
+        document.getElementById('syncFromGraphicalBtn').onclick = syncFromGraphicalToAdvanced;
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                document.getElementById(btn.dataset.tab + "Tab").classList.add('active');
+                if(btn.dataset.tab === 'graphical') syncFromAdvancedToGraphical();
+                else updateAdvancedJsonFromGraphical();
+            });
+        });
         const storedHistory = localStorage.getItem(HISTORY_KEY);
-        if(storedHistory) try { requestHistory = JSON.parse(storedHistory); renderHistory(); } catch(e){}
+        if(storedHistory) try { requestHistory = JSON.parse(storedHistory); renderHistory(); } catch(e) {}
+        updateAdvancedJsonFromGraphical();
     }
     
     function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-    
-    // Start: OAuth Handler + UI
-    window.onload = () => {
-        handleOAuthRedirect();
-    };
+    window.onload = handleOAuthRedirect;
 </script>
 </body>
 </html>
